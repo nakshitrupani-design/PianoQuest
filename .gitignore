@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production / Builds
+dist/
+build/
+
+# Miscellaneous
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Security & Credentials
+.env
+.env.local
+.env.*.local
+.env*
+!.env.example
+*.pem
+*.sa.json
+*key*.json
+*secret*.json
+credentials*.json
+service-account*.json
+.npmrc
+.npmrc*
+
+# Firebase local files (excluding config required for applet deployment)
+.firebase/
+*-debug.log
+firebase-debug.log*
+ui-debug.log*

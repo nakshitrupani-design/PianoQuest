@@ -1,0 +1,6 @@
+{
+  "name": "PianoQuest",
+  "description": "A futuristic AI-powered piano tutor that uses microphone input to provide real-time feedback and progressive learning levels.",
+  "requestFramePermissions": ["microphone", "camera"],
+  "majorCapabilities": ["audio_processing", "ai_feedback"]
+}

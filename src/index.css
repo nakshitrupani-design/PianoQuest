@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neon-blue: #00f2ff;
+  --color-neon-purple: #bc13fe;
+  --color-glass: rgba(20, 20, 25, 0.8);
+  --color-bg-dark: #050507;
+  --color-bg-visualizer: #0a0a0f;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--color-bg-dark)] text-white antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .neo-glow { 
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); 
+  }
+  
+  .hologram-line { 
+    background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.5), transparent); 
+  }
+  
+  .glass { 
+    background: var(--color-glass); 
+    backdrop-filter: blur(12px); 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+  }
+  
+  .mono { 
+    font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; 
+  }
+
+  .note-tail {
+    background: linear-gradient(to top, #00f2ff, transparent);
+  }
+
+  .key-active {
+    background: linear-gradient(to top, #00f2ff, #bc13fe);
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes flow {
+  from { stroke-dashoffset: 50; }
+  to { stroke-dashoffset: 0; }
+}
+
+.path-animation {
+  animation: flow 4s linear infinite;
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 2px #00f2ff); }
+  to { filter: drop-shadow(0 0 10px #00f2ff); }
+}
+

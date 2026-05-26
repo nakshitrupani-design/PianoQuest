@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helpers
+    function isSignedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // User Profile
+    match /users/{userId} {
+      function isValidUser(data) {
+        return data.xp is number && data.xp >= 0 &&
+               (data.get('displayName', '') is string && data.get('displayName', '').size() < 100) &&
+               (data.get('photoURL', '') is string && data.get('photoURL', '').size() < 500);
+      }
+
+      // Public list/get for leaderboards
+      allow get, list: if true;
+      
+      allow create: if isOwner(userId) && isValidUser(request.resource.data) && request.resource.data.uid == userId;
+      allow update: if isOwner(userId) && isValidUser(request.resource.data) &&
+                      request.resource.data.xp >= resource.data.xp && // Can't decrease XP
+                      request.resource.data.uid == resource.data.uid; // Identity freeze
+      allow delete: if false; // Progress is permanent
+    }
+
+    // Scores
+    match /scores/{scoreId} {
+      function isValidScore(data) {
+        return data.keys().hasAll(['userId', 'songId', 'score']) &&
+               data.userId == request.auth.uid &&
+               data.songId is string &&
+               data.score is number && data.score >= 0 &&
+               (data.get('accuracy', 0) is number) &&
+               (data.get('combo', 0) is number);
+      }
+
+      allow get: if isSignedIn() && (resource.data.userId == request.auth.uid);
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid);
+      allow create: if isSignedIn() && isValidScore(request.resource.data);
+      allow update, delete: if false;
+    }
+  }
+}
